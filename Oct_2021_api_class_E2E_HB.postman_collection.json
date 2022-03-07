@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "89a44ae3-d79f-4ba8-ac4f-a995a89c879d",
+		"name": "Oct_2021_api_class_E2E_HB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New sign up test",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// email address using faker",
+							"pm.environment.set(\"fakeEmail\", pm.variables.replaceIn('{{$randomEmail}}'));",
+							"",
+							"// email address using faker",
+							"pm.environment.set(\"fakeFirstName\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+							"",
+							"// dob",
+							"// year",
+							"pm.environment.set(\"fakeYear\", _.random(1965, 2015));",
+							"",
+							"//gender",
+							"const genderList = [\"male\", \"female\"];",
+							"const randomGender = Math.floor(Math.random()*genderList.length);",
+							"pm.environment.set(\"fakeGender\", genderList[randomGender]);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// RC ",
+							"// Response body is correct",
+							"",
+							"const res = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Verify success is set to true\", function () {",
+							"    pm.expect(res.success).to.eql(true);",
+							"});",
+							"",
+							"pm.test(\"Verify Registration Success message in Response\", function () {",
+							"    pm.expect(res.message).to.eql(\"Registration Success\");",
+							"});",
+							"",
+							"pm.test(\"Verify id property is not empty\", function () {",
+							"    pm.expect(res.id).is.an('string');",
+							"    pm.expect(res.id).is.not.empty;",
+							"    pm.expect(res).to.have.property(\"id\").which.is.an(\"string\");",
+							"    // rejex",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\" : \"{{fakeFirstName}}\",\n    \"lastName\" : \"Test\",\n    \"email\"     : \"{{fakeEmail}}\",\n    \"password\"  : \"Test12345\",\n    \"confirmPassword\"  : \"Test12345\",\n    \"dob\"       : {\n        \"year\"      : {{fakeYear}},\n        \"month\"     : 12,\n        \"day\"       : 31\n    },\n    \"gender\"    : \"{{fakeGender}}\",\n    \"agree\"     : true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/signup",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login using student email",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"{{fakeEmail}}\",\n    \"password\" : \"Test12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login using student Id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\" : \"TTCFD8Il\",\n    \"password\" : \"Test12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find all students",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/students",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find student by Id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/student/TTCFD8Il",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"student",
+						"TTCFD8Il"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update student info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xYS50YWx0ZWt0Yy5jb20iLCJhdWQiOiJUSEVfQVVESUVOQ0UiLCJpYXQiOjE2MzUxMDI1ODcsIm5iZiI6MTYzNTEwMjU5NywiZXhwIjoxNjM1MTg4OTg3LCJpc19hZG1pbiI6ZmFsc2UsImRhdGEiOnsiaWQiOiIyIiwiZmlyc3RfbmFtZSI6IkZhaGltIiwibGFzdF9uYW1lIjoiVGVzdCIsImVtYWlsIjoiZmFoaW0udGVzdDNAZ21haWwuY29tIiwic3R1ZGVudElkIjoiVFRDTGJoMlgifX0.KBOxnAJXgM7RC4-QTXYExdmwd9CnXg4pTmGCRtz-3nE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\" : \"Fahim\",\n    \"lastName\" : \"Rahman\",\n    \"email\"     : \"fahim.test45@gmail.com\",\n    \"dob\"       : {\n        \"year\"      : 2000,\n        \"month\"     : 12,\n        \"day\"       : 2\n    },\n    \"gender\"    : \"male\",\n    \"agree\"     : true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/student/TTCLbh2X",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"student",
+						"TTCLbh2X"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xYS50YWx0ZWt0Yy5jb20iLCJhdWQiOiJUSEVfQVVESUVOQ0UiLCJpYXQiOjE2MzUxMDI4ODksIm5iZiI6MTYzNTEwMjg5OSwiZXhwIjoxNjM1MTg5Mjg5LCJpc19hZG1pbiI6ZmFsc2UsImRhdGEiOnsiaWQiOiIyIiwiZmlyc3RfbmFtZSI6IkZhaGltIiwibGFzdF9uYW1lIjoiUmFobWFuIiwiZW1haWwiOiJmYWhpbS50ZXN0M0BnbWFpbC5jb20iLCJzdHVkZW50SWQiOiJUVENMYmgyWCJ9fQ.TpYZyguWPLyvLdMC1FUNzGg_DgxPGn7KBBhqGI_EhyY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\"  : \"1234567\",\n    \"confirmPassword\"  : \"1234567\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/updatePassword/TTCLbh2X",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"updatePassword",
+						"TTCLbh2X"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove student from DB",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9xYS50YWx0ZWt0Yy5jb20iLCJhdWQiOiJUSEVfQVVESUVOQ0UiLCJpYXQiOjE2MzUxMDM4ODQsIm5iZiI6MTYzNTEwMzg5NCwiZXhwIjoxNjM1MTkwMjg0LCJpc19hZG1pbiI6ZmFsc2UsImRhdGEiOnsiaWQiOiIyIiwiZmlyc3RfbmFtZSI6IkZhaGltIiwibGFzdF9uYW1lIjoiUmFobWFuIiwiZW1haWwiOiJmYWhpbS50ZXN0M0BnbWFpbC5jb20iLCJzdHVkZW50SWQiOiJUVENMYmgyWCJ9fQ.gb5yuIifKk1ge1mRzscat35RxHYlQYD_ySMJK3UsuVg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/student/TTCLbh2X",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"student",
+						"TTCLbh2X"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
